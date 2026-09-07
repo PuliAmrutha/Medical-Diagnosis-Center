@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_ui_module">
+    <sys_ui_module action="DELETE">
+        <active>true</active>
+        <application display_value="Diagnostic Test Table">9238765693cf4710af1fff118bba105a</application>
+        <filter/>
+        <name>Diagnostic Test Tables</name>
+        <order/>
+        <path/>
+        <path_relative_to_root>false</path_relative_to_root>
+        <roles>x_2056513_medica_0.diagnostic_test_table_user</roles>
+        <sys_class_name>sys_ui_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-09-03 05:31:53</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>1638765693cf4710af1fff118bba105e</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Diagnostic Test Tables</sys_name>
+        <sys_package display_value="Medical Diagnosis Center" source="x_2056513_medica_0">8d5daa9e934f4710af1fff118bba10b5</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Medical Diagnosis Center">8d5daa9e934f4710af1fff118bba10b5</sys_scope>
+        <sys_update_name>sys_ui_module_1638765693cf4710af1fff118bba105e</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-09-03 05:31:53</sys_updated_on>
+        <table>x_2056513_medica_0_diagnostic_test_table</table>
+        <uncancelable>false</uncancelable>
+        <view_name/>
+    </sys_ui_module>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Medical Diagnosis Center">8d5daa9e934f4710af1fff118bba10b5</application>
+        <file_path/>
+        <instance_id>43f1c3f12bb7d218e83bf9f66e91bfb9</instance_id>
+        <instance_name>dev296368</instance_name>
+        <name>sys_ui_module_1638765693cf4710af1fff118bba105e</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_ui_module"><sys_ui_module action="INSERT_OR_UPDATE"><active>true</active><application display_value="Diagnostic Test Table">9238765693cf4710af1fff118bba105a</application><filter/><name>Diagnostic Test Tables</name><order/><path/><path_relative_to_root>false</path_relative_to_root><roles>x_2056513_medica_0.diagnostic_test_table_user</roles><sys_class_name>sys_ui_module</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2026-09-03 05:31:53</sys_created_on><sys_domain>global</sys_domain><sys_domain_path>/</sys_domain_path><sys_id>1638765693cf4710af1fff118bba105e</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Diagnostic Test Tables</sys_name><sys_package display_value="Medical Diagnosis Center" source="x_2056513_medica_0">8d5daa9e934f4710af1fff118bba10b5</sys_package><sys_policy/><sys_scope display_value="Medical Diagnosis Center">8d5daa9e934f4710af1fff118bba10b5</sys_scope><sys_update_name>sys_ui_module_1638765693cf4710af1fff118bba105e</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2026-09-03 05:31:53</sys_updated_on><table>x_2056513_medica_0_diagnostic_test_table</table><uncancelable>false</uncancelable><view_name/></sys_ui_module></record_update>]]></payload>
+        <payload_hash>-1867392359</payload_hash>
+        <record_name>Diagnostic Test Tables</record_name>
+        <reverted_from/>
+        <source>c55daa9e934f4710af1fff118bba10be</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-09-03 05:31:53</sys_created_on>
+        <sys_id>6e38765693cf4710af1fff118bba1061</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1a065c08e120000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-09-03 05:31:53</sys_updated_on>
+        <type>Module</type>
+        <update_guid>2e38765678cf4710a3be1b40dd7f2660</update_guid>
+        <update_guid_history>2e38765678cf4710a3be1b40dd7f2660:-1867392359</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-09-03 06:37:09</sys_created_on>
+        <sys_db_object display_value="" name="sys_ui_module">sys_ui_module</sys_db_object>
+        <sys_id>a8894cb220fb4867894987a2b9d54741</sys_id>
+        <sys_metadata>1638765693cf4710af1fff118bba105e</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Diagnostic Test Tables</sys_name>
+        <sys_package display_value="Medical Diagnosis Center" source="x_2056513_medica_0">8d5daa9e934f4710af1fff118bba10b5</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Medical Diagnosis Center">8d5daa9e934f4710af1fff118bba10b5</sys_scope>
+        <sys_scope_delete display_value="">976135a97b414f05b00df062e8a24a69</sys_scope_delete>
+        <sys_update_name>sys_ui_module_1638765693cf4710af1fff118bba105e</sys_update_name>
+        <sys_update_version display_value="sys_ui_module_1638765693cf4710af1fff118bba105e">6e38765693cf4710af1fff118bba1061</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-09-03 06:37:09</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>
