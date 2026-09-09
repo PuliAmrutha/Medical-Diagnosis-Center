@@ -1137,269 +1137,639 @@
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2026-09-03 09:25:04</sys_created_on>
         <sys_id>4c7def5693878710af1fff118bba10e3</sys_id>
-        <sys_mod_count>4</sys_mod_count>
+        <sys_mod_count>5</sys_mod_count>
         <sys_name>My Appointments</sys_name>
         <sys_package display_value="Medical Diagnosis Center" source="x_2056513_medica_0">8d5daa9e934f4710af1fff118bba10b5</sys_package>
         <sys_policy/>
         <sys_scope display_value="Medical Diagnosis Center">8d5daa9e934f4710af1fff118bba10b5</sys_scope>
         <sys_update_name>sp_widget_4c7def5693878710af1fff118bba10e3</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2026-09-03 11:30:42</sys_updated_on>
+        <sys_updated_on>2026-09-09 04:45:02</sys_updated_on>
         <template><![CDATA[<div>
-<!-- your widget template -->
+  <!-- MY APPOINTMENTS WIDGET -->
   <div class="my-appts">
-<!-- HEADER -->
-  <div class="appts-header">
-    <div class="header-left">
-      <h1 class="header-title">]]>📋<![CDATA[ My Appointments</h1>
-      <p class="header-sub">Track all your booked diagnostic tests in one place.</p>
+
+    <!-- HEADER -->
+    <div class="appts-header">
+      <div class="header-left">
+        <h1 class="header-title">]]>📋<![CDATA[ My Appointments</h1>
+        <p class="header-sub">
+          Track all your booked diagnostic tests in one place.
+        </p>
+      </div>
+
+      <div class="header-right">
+        <button class="btn-book-new" ng-click="c.bookNew()">
+          <i class="fa fa-plus"></i> Book New Test
+        </button>
+      </div>
     </div>
-    <div class="header-right">
-      <button class="btn-book-new" ng-click="c.bookNew()">
-        <i class="fa fa-plus"></i> Book New Test
+
+
+    <!-- STATS BAR -->
+    <div class="stats-bar">
+      <div class="stat-card" ng-repeat="stat in c.stats">
+        <span class="stat-icon">{{stat.icon}}</span>
+
+        <div class="stat-info">
+          <span class="stat-val">{{stat.count}}</span>
+          <span class="stat-name">{{stat.label}}</span>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- FILTER TABS -->
+    <div class="filter-tabs">
+      <button
+        class="filter-tab"
+        ng-repeat="tab in c.tabs"
+        ng-class="{'active': c.activeTab === tab.key}"
+        ng-click="c.setTab(tab.key)"
+      >
+        {{tab.label}}
+
+        <span
+          class="tab-count"
+          ng-if="tab.count > 0"
+        >
+          {{tab.count}}
+        </span>
       </button>
     </div>
-  </div>
 
-  <!-- STATS BAR -->
-  <div class="stats-bar">
-    <div class="stat-card" ng-repeat="stat in c.stats">
-      <span class="stat-icon">{{stat.icon}}</span>
-      <div class="stat-info">
-        <span class="stat-val">{{stat.count}}</span>
-        <span class="stat-name">{{stat.label}}</span>
+
+    <!-- SEARCH + SORT -->
+    <div class="list-controls">
+
+      <div class="search-mini-wrap">
+        <i class="fa fa-search"></i>
+
+        <input
+          type="text"
+          placeholder="Search appointments..."
+          ng-model="c.searchQuery"
+          ng-change="c.filterAppointments()"
+          class="search-mini"
+        />
       </div>
+
+      <select
+        ng-model="c.sortBy"
+        ng-change="c.sortAppointments()"
+        class="sort-mini"
+      >
+        <option value="date_desc">Newest First</option>
+        <option value="date_asc">Oldest First</option>
+        <option value="status">By Status</option>
+      </select>
+
     </div>
-  </div>
 
-  <!-- FILTER TABS -->
-  <div class="filter-tabs">
-    <button
-      class="filter-tab"
-      ng-repeat="tab in c.tabs"
-      ng-class="{'active': c.activeTab === tab.key}"
-      ng-click="c.setTab(tab.key)"
-    >
-      {{tab.label}}
-      <span class="tab-count" ng-if="tab.count > 0">{{tab.count}}</span>
-    </button>
-  </div>
 
-  <!-- SEARCH + SORT -->
-  <div class="list-controls">
-    <div class="search-mini-wrap">
-      <i class="fa fa-search"></i>
-      <input
-        type="text"
-        placeholder="Search appointments..."
-        ng-model="c.searchQuery"
-        ng-change="c.filterAppointments()"
-        class="search-mini"
-      />
-    </div>
-    <select ng-model="c.sortBy" ng-change="c.sortAppointments()" class="sort-mini">
-      <option value="date_desc">Newest First</option>
-      <option value="date_asc">Oldest First</option>
-      <option value="status">By Status</option>
-    </select>
-  </div>
-
-  <!-- LOADING -->
-  <div class="loading-center" ng-if="c.loading">
-    <div class="spinner-ring"></div>
-    <p>Loading your appointments...</p>
-  </div>
-
-  <!-- EMPTY STATE -->
-  <div class="empty-appts" ng-if="!c.loading && c.filteredAppointments.length === 0">
-    <div class="empty-emoji">]]>📭<![CDATA[</div>
-    <h3>No appointments found</h3>
-    <p ng-if="c.activeTab !== 'all'">No {{c.activeTab}} appointments yet.</p>
-    <p ng-if="c.activeTab === 'all'">You haven't booked any tests yet.</p>
-    <button class="btn-book-first" ng-click="c.bookNew()">Book Your First Test</button>
-  </div>
-
-  <!-- APPOINTMENTS LIST -->
-  <div class="appts-list" ng-if="!c.loading && c.filteredAppointments.length > 0">
+    <!-- LOADING -->
     <div
-      class="appt-card"
-      ng-repeat="appt in c.filteredAppointments"
-      ng-class="'appt-' + appt.status"
+      class="loading-center"
+      ng-if="c.loading"
+    >
+      <div class="spinner-ring"></div>
+
+      <p>
+        Loading your appointments...
+      </p>
+    </div>
+
+
+    <!-- EMPTY STATE -->
+    <div
+      class="empty-appts"
+      ng-if="!c.loading && c.filteredAppointments.length === 0"
     >
 
-      <!-- LEFT ACCENT BAR -->
-      <div class="appt-accent-bar" ng-style="{'background': c.getStatusColor(appt.status)}"></div>
+      <div class="empty-emoji">
+        ]]>📭
+<![CDATA[      </div>
 
-      <!-- CARD CONTENT -->
-      <div class="appt-content">
+      <h3>
+        No appointments found
+      </h3>
 
-        <!-- TOP ROW -->
-        <div class="appt-top">
-          <div class="appt-title-group">
-            <span class="appt-icon">{{c.getCategoryIcon(appt.test_category)}}</span>
-            <div>
-              <h3 class="appt-test-name">{{appt.test_name}}</h3>
-              <span class="appt-number">{{appt.appointment_number}}</span>
-            </div>
-          </div>
-          <div class="appt-status-wrap">
-            <span
-              class="status-pill"
-              ng-style="{'background': c.getStatusBg(appt.status), 'color': c.getStatusColor(appt.status)}"
-            >
-              {{c.getStatusIcon(appt.status)}} {{c.getStatusLabel(appt.status)}}
-            </span>
-            <span
-              class="approval-pill"
-              ng-if="appt.approval_status"
-              ng-class="'approval-' + appt.approval_status"
-            >
-              {{c.getApprovalLabel(appt.approval_status)}}
-            </span>
-          </div>
-        </div>
+      <p ng-if="c.activeTab !== 'all'">
+        No {{c.activeTab}} appointments yet.
+      </p>
 
-        <!-- META ROW -->
-        <div class="appt-meta">
-          <div class="meta-chip">
-            <i class="fa fa-calendar"></i>
-            <span>{{appt.scheduled_date_display}}</span>
-          </div>
-          <div class="meta-chip">
-            <i class="fa fa-clock-o"></i>
-            <span>{{appt.slot_time || 'N/A'}}</span>
-          </div>
-          <div class="meta-chip">
-            <i class="fa fa-tag"></i>
-            <span>{{appt.test_category || 'General'}}</span>
-          </div>
-          <div class="meta-chip" ng-if="appt.total_amount">
-            <i class="fa fa-dollar"></i>
-            <span>${{appt.total_amount | number:2}}</span>
-          </div>
-        </div>
+      <p ng-if="c.activeTab === 'all'">
+        You haven't booked any tests yet.
+      </p>
 
-        <!-- PAYMENT + APPROVAL STATUS -->
-        <div class="appt-info-row">
-          <div class="info-badge" ng-class="'pay-' + appt.payment_status">
-            <i class="fa fa-credit-card"></i>
-            Payment: <strong>{{c.getPaymentLabel(appt.payment_status)}}</strong>
-          </div>
-          <div class="info-badge approval-info" ng-if="appt.approved_by_name">
-            <i class="fa fa-user-check"></i>
-            Approved by: <strong>{{appt.approved_by_name}}</strong>
-          </div>
-          <div class="info-badge conf-badge" ng-if="appt.confirmation_sent">
-            <i class="fa fa-envelope-o"></i> Confirmation Sent
-          </div>
-        </div>
+      <button
+        class="btn-book-first"
+        ng-click="c.bookNew()"
+      >
+        Book Your First Test
+      </button>
 
-        <!-- NOTES -->
-        <div class="appt-notes" ng-if="appt.notes">
-          <i class="fa fa-sticky-note-o"></i> <em>{{appt.notes}}</em>
-        </div>
-
-        <!-- REJECTION REASON -->
-        <div class="rejection-banner" ng-if="appt.rejection_reason">
-          <i class="fa fa-exclamation-circle"></i>
-          <div>
-            <strong>Rejection Reason:</strong>
-            <span>{{appt.rejection_reason}}</span>
-          </div>
-        </div>
-
-        <!-- ACTIONS -->
-        <div class="appt-actions">
-          <button
-            class="appt-action-btn btn-view"
-            ng-click="c.viewDetails(appt)"
-          >
-            <i class="fa fa-eye"></i> View Details
-          </button>
-          <button
-            class="appt-action-btn btn-cancel"
-            ng-if="c.canCancel(appt)"
-            ng-click="c.cancelAppointment(appt)"
-          >
-            <i class="fa fa-times"></i> Cancel
-          </button>
-          <button
-            class="appt-action-btn btn-report"
-            ng-if="appt.has_report"
-            ng-click="c.viewReport(appt)"
-          >
-            <i class="fa fa-file-text"></i> View Report
-          </button>
-          <span class="date-chip">
-            Booked: {{appt.created_on_display}}
-          </span>
-        </div>
-
-      </div>
     </div>
-  </div>
 
-  <!-- DETAIL MODAL -->
-  <div class="modal-overlay" ng-if="c.showModal" ng-click="c.closeModal()">
-    <div class="modal-box" ng-click="$event.stopPropagation()">
-      <div class="modal-header">
-        <h3>Appointment Details</h3>
-        <button class="modal-close" ng-click="c.closeModal()">✕</button>
-      </div>
-      <div class="modal-body" ng-if="c.selectedAppt">
-        <div class="detail-grid">
-          <div class="detail-item">
-            <span class="detail-key">Appointment #</span>
-            <span class="detail-val mono">{{c.selectedAppt.appointment_number}}</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-key">Status</span>
-            <span class="detail-val">
-              <span class="status-pill" ng-style="{'background': c.getStatusBg(c.selectedAppt.status), 'color': c.getStatusColor(c.selectedAppt.status)}">
-                {{c.getStatusLabel(c.selectedAppt.status)}}
+
+    <!-- APPOINTMENTS LIST -->
+    <div
+      class="appts-list"
+      ng-if="!c.loading && c.filteredAppointments.length > 0"
+    >
+
+      <div
+        class="appt-card"
+        ng-repeat="appt in c.filteredAppointments"
+        ng-class="'appt-' + appt.status"
+      >
+
+        <!-- LEFT ACCENT BAR -->
+        <div
+          class="appt-accent-bar"
+          ng-style="{
+            'background': c.getStatusColor(appt.status)
+          }"
+        ></div>
+
+
+        <!-- CARD CONTENT -->
+        <div class="appt-content">
+
+
+          <!-- TOP ROW -->
+          <div class="appt-top">
+
+            <div class="appt-title-group">
+
+              <span class="appt-icon">
+                {{c.getCategoryIcon(appt.test_category)}}
               </span>
+
+              <div>
+
+                <h3 class="appt-test-name">
+                  {{appt.test_name}}
+                </h3>
+
+                <span class="appt-number">
+                  {{appt.appointment_number}}
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <!-- STATUS -->
+            <div class="appt-status-wrap">
+
+              <span
+                class="status-pill"
+                ng-style="{
+                  'background': c.getStatusBg(appt.status),
+                  'color': c.getStatusColor(appt.status)
+                }"
+              >
+                {{c.getStatusIcon(appt.status)}}
+                {{c.getStatusLabel(appt.status)}}
+              </span>
+
+
+              <span
+                class="approval-pill"
+                ng-if="appt.approval_status"
+                ng-class="'approval-' + appt.approval_status"
+              >
+                {{c.getApprovalLabel(appt.approval_status)}}
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- META ROW -->
+          <div class="appt-meta">
+
+            <!-- DATE -->
+            <div class="meta-chip">
+
+              <i class="fa fa-calendar"></i>
+
+              <span>
+                {{appt.scheduled_date_display}}
+              </span>
+
+            </div>
+
+
+            <!-- TIME -->
+            <div class="meta-chip">
+
+              <i class="fa fa-clock-o"></i>
+
+              <span>
+                {{appt.slot_time || 'N/A'}}
+              </span>
+
+            </div>
+
+
+            <!-- CATEGORY -->
+            <div class="meta-chip">
+
+              <i class="fa fa-tag"></i>
+
+              <span>
+                {{appt.test_category || 'General'}}
+              </span>
+
+            </div>
+
+
+            <!-- TOTAL AMOUNT -->
+            <div
+              class="meta-chip"
+              ng-if="appt.total_amount !== null && appt.total_amount !== undefined"
+            >
+
+              <i class="fa fa-dollar"></i>
+
+              <span>
+                {{'$' + (appt.total_amount | number:2)}}
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- PAYMENT + APPROVAL STATUS -->
+          <div class="appt-info-row">
+
+            <!-- PAYMENT -->
+            <div
+              class="info-badge"
+              ng-class="'pay-' + appt.payment_status"
+            >
+
+              <i class="fa fa-credit-card"></i>
+
+              Payment:
+
+              <strong>
+                {{c.getPaymentLabel(appt.payment_status)}}
+              </strong>
+
+            </div>
+
+
+            <!-- APPROVED BY -->
+            <div
+              class="info-badge approval-info"
+              ng-if="appt.approved_by_name"
+            >
+
+              <i class="fa fa-user-check"></i>
+
+              Approved by:
+
+              <strong>
+                {{appt.approved_by_name}}
+              </strong>
+
+            </div>
+
+
+            <!-- CONFIRMATION -->
+            <div
+              class="info-badge conf-badge"
+              ng-if="appt.confirmation_sent"
+            >
+
+              <i class="fa fa-envelope-o"></i>
+
+              Confirmation Sent
+
+            </div>
+
+          </div>
+
+
+          <!-- NOTES -->
+          <div
+            class="appt-notes"
+            ng-if="appt.notes"
+          >
+
+            <i class="fa fa-sticky-note-o"></i>
+
+            <em>
+              {{appt.notes}}
+            </em>
+
+          </div>
+
+
+          <!-- REJECTION REASON -->
+          <div
+            class="rejection-banner"
+            ng-if="appt.rejection_reason"
+          >
+
+            <i class="fa fa-exclamation-circle"></i>
+
+            <div>
+
+              <strong>
+                Rejection Reason:
+              </strong>
+
+              <span>
+                {{appt.rejection_reason}}
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- ACTIONS -->
+          <div class="appt-actions">
+
+            <!-- VIEW DETAILS -->
+            <button
+              class="appt-action-btn btn-view"
+              ng-click="c.viewDetails(appt)"
+            >
+
+              <i class="fa fa-eye"></i>
+
+              View Details
+
+            </button>
+
+
+            <!-- CANCEL -->
+            <button
+              class="appt-action-btn btn-cancel"
+              ng-if="c.canCancel(appt)"
+              ng-click="c.cancelAppointment(appt)"
+            >
+
+              <i class="fa fa-times"></i>
+
+              Cancel
+
+            </button>
+
+
+            <!-- VIEW REPORT -->
+            <button
+              class="appt-action-btn btn-report"
+              ng-if="appt.has_report"
+              ng-click="c.viewReport(appt)"
+            >
+
+              <i class="fa fa-file-text"></i>
+
+              View Report
+
+            </button>
+
+
+            <!-- BOOKED DATE -->
+            <span class="date-chip">
+
+              Booked:
+
+              {{appt.created_on_display}}
+
             </span>
+
           </div>
-          <div class="detail-item">
-            <span class="detail-key">Test</span>
-            <span class="detail-val">{{c.selectedAppt.test_name}}</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-key">Category</span>
-            <span class="detail-val">{{c.selectedAppt.test_category}}</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-key">Scheduled Date</span>
-            <span class="detail-val">{{c.selectedAppt.scheduled_date_display}}</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-key">Time Slot</span>
-            <span class="detail-val">{{c.selectedAppt.slot_time}}</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-key">Total Amount</span>
-            <span class="detail-val paid-green">${{c.selectedAppt.total_amount | number:2}}</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-key">Payment Status</span>
-            <span class="detail-val">{{c.getPaymentLabel(c.selectedAppt.payment_status)}}</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-key">Approval Status</span>
-            <span class="detail-val">{{c.getApprovalLabel(c.selectedAppt.approval_status)}}</span>
-          </div>
-          <div class="detail-item full">
-            <span class="detail-key">Notes</span>
-            <span class="detail-val">{{c.selectedAppt.notes || 'None'}}</span>
-          </div>
+
         </div>
+
       </div>
-      <div class="modal-footer">
-        <button class="btn-close-modal" ng-click="c.closeModal()">Close</button>
-      </div>
+
     </div>
+
+
+    <!-- DETAIL MODAL -->
+    <div
+      class="modal-overlay"
+      ng-if="c.showModal"
+      ng-click="c.closeModal()"
+    >
+
+      <div
+        class="modal-box"
+        ng-click="$event.stopPropagation()"
+      >
+
+
+        <!-- MODAL HEADER -->
+        <div class="modal-header">
+
+          <h3>
+            Appointment Details
+          </h3>
+
+          <button
+            class="modal-close"
+            ng-click="c.closeModal()"
+          >
+            ✕
+          </button>
+
+        </div>
+
+
+        <!-- MODAL BODY -->
+        <div
+          class="modal-body"
+          ng-if="c.selectedAppt"
+        >
+
+          <div class="detail-grid">
+
+
+            <!-- APPOINTMENT NUMBER -->
+            <div class="detail-item">
+
+              <span class="detail-key">
+                Appointment #
+              </span>
+
+              <span class="detail-val mono">
+                {{c.selectedAppt.appointment_number}}
+              </span>
+
+            </div>
+
+
+            <!-- STATUS -->
+            <div class="detail-item">
+
+              <span class="detail-key">
+                Status
+              </span>
+
+              <span class="detail-val">
+
+                <span
+                  class="status-pill"
+                  ng-style="{
+                    'background': c.getStatusBg(c.selectedAppt.status),
+                    'color': c.getStatusColor(c.selectedAppt.status)
+                  }"
+                >
+
+                  {{c.getStatusLabel(c.selectedAppt.status)}}
+
+                </span>
+
+              </span>
+
+            </div>
+
+
+            <!-- TEST -->
+            <div class="detail-item">
+
+              <span class="detail-key">
+                Test
+              </span>
+
+              <span class="detail-val">
+                {{c.selectedAppt.test_name}}
+              </span>
+
+            </div>
+
+
+            <!-- CATEGORY -->
+            <div class="detail-item">
+
+              <span class="detail-key">
+                Category
+              </span>
+
+              <span class="detail-val">
+                {{c.selectedAppt.test_category}}
+              </span>
+
+            </div>
+
+
+            <!-- SCHEDULED DATE -->
+            <div class="detail-item">
+
+              <span class="detail-key">
+                Scheduled Date
+              </span>
+
+              <span class="detail-val">
+                {{c.selectedAppt.scheduled_date_display}}
+              </span>
+
+            </div>
+
+
+            <!-- TIME SLOT -->
+            <div class="detail-item">
+
+              <span class="detail-key">
+                Time Slot
+              </span>
+
+              <span class="detail-val">
+                {{c.selectedAppt.slot_time}}
+              </span>
+
+            </div>
+
+
+            <!-- TOTAL AMOUNT -->
+            <div class="detail-item">
+
+              <span class="detail-key">
+                Total Amount
+              </span>
+
+              <span class="detail-val paid-green">
+                {{'$' + (c.selectedAppt.total_amount | number:2)}}
+              </span>
+
+            </div>
+
+
+            <!-- PAYMENT STATUS -->
+            <div class="detail-item">
+
+              <span class="detail-key">
+                Payment Status
+              </span>
+
+              <span class="detail-val">
+                {{c.getPaymentLabel(c.selectedAppt.payment_status)}}
+              </span>
+
+            </div>
+
+
+            <!-- APPROVAL STATUS -->
+            <div class="detail-item">
+
+              <span class="detail-key">
+                Approval Status
+              </span>
+
+              <span class="detail-val">
+                {{c.getApprovalLabel(c.selectedAppt.approval_status)}}
+              </span>
+
+            </div>
+
+
+            <!-- NOTES -->
+            <div class="detail-item full">
+
+              <span class="detail-key">
+                Notes
+              </span>
+
+              <span class="detail-val">
+                {{c.selectedAppt.notes || 'None'}}
+              </span>
+
+            </div>
+
+
+          </div>
+
+        </div>
+
+
+        <!-- MODAL FOOTER -->
+        <div class="modal-footer">
+
+          <button
+            class="btn-close-modal"
+            ng-click="c.closeModal()"
+          >
+            Close
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
-</div>
 </div>]]></template>
     </sp_widget>
 </record_update>
